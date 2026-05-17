@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>🥁 Bateria Virtual</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 </head>
@@ -12,187 +13,200 @@
 
     <!-- MENU -->
     <div id="menu" class="screen active">
-        <h1>🥁 Bateria Virtual</h1>
-        <p class="sub">Até 4 dispositivos: 2 Baquetas + 2 Pedais</p>
-        <button class="menu-btn" onclick="APP.openKit()">
-            <span class="ico">🖥️</span>
-            <div>
-                <strong>Bateria (Visor)</strong>
-                <div class="desc">Mostra a bateria — use no PC ou TV</div>
-            </div>
-        </button>
-        <button class="menu-btn" onclick="APP.openStick()">
-            <span class="ico">🥢</span>
-            <div>
-                <strong>Baqueta</strong>
-                <div class="desc">Segure o celular e bata no ar!</div>
-            </div>
-        </button>
-        <button class="menu-btn" onclick="APP.openPedal()">
-            <span class="ico">🦶</span>
-            <div>
-                <strong>Pedal</strong>
-                <div class="desc">Bumbo ou Hi-Hat com o pé</div>
-            </div>
-        </button>
+        <div class="menu-glow"></div>
+        <h1 class="title-main">DRUM<span class="title-accent">KIT</span></h1>
+        <p class="sub">Virtual Drumkit — Celular como Baqueta</p>
+        <div class="menu-cards">
+            <button class="mcard" onclick="APP.openKit()">
+                <div class="mcard-icon">🖥️</div>
+                <div class="mcard-label">VISOR</div>
+                <div class="mcard-desc">Mostra a bateria no PC/TV</div>
+            </button>
+            <button class="mcard" onclick="APP.openStick()">
+                <div class="mcard-icon">🥢</div>
+                <div class="mcard-label">BAQUETA</div>
+                <div class="mcard-desc">Segure o celular e toque!</div>
+            </button>
+            <button class="mcard" onclick="APP.openPedal()">
+                <div class="mcard-icon">🦶</div>
+                <div class="mcard-label">PEDAL</div>
+                <div class="mcard-desc">Bumbo ou Hi-Hat</div>
+            </button>
+        </div>
     </div>
 
     <!-- KIT SETUP -->
     <div id="kit-setup" class="screen">
-        <button class="back-btn" onclick="APP.goMenu()">← Menu</button>
-        <h2>🥁 Kit de Bateria</h2>
-        <p class="hint">Conecte até 4 dispositivos:</p>
-        <div id="qrbox">
-            <canvas id="qrc" width="170" height="170"></canvas>
+        <button class="back-btn" onclick="APP.goMenu()">‹ Voltar</button>
+        <div class="setup-card">
+            <h2>🥁 Configurar Kit</h2>
+            <p class="hint">Conecte até 4 dispositivos</p>
+            <div id="qrbox"><canvas id="qrc" width="180" height="180"></canvas></div>
+            <div id="gid">---</div>
+            <a id="lnk" href="#" target="_blank"></a>
+            <div class="dev-grid">
+                <div class="dev-slot" id="c-stick1">
+                    <div class="dev-icon">🥢</div>
+                    <div class="dev-name">Baqueta R</div>
+                    <div class="dev-status"><span class="dot"></span></div>
+                </div>
+                <div class="dev-slot" id="c-stick2">
+                    <div class="dev-icon">🥢</div>
+                    <div class="dev-name">Baqueta L</div>
+                    <div class="dev-status"><span class="dot"></span></div>
+                </div>
+                <div class="dev-slot" id="c-pedal1">
+                    <div class="dev-icon">🦶</div>
+                    <div class="dev-name">Pedal Bumbo</div>
+                    <div class="dev-status"><span class="dot"></span></div>
+                </div>
+                <div class="dev-slot" id="c-pedal2">
+                    <div class="dev-icon">🎩</div>
+                    <div class="dev-name">Pedal Hi-Hat</div>
+                    <div class="dev-status"><span class="dot"></span></div>
+                </div>
+            </div>
+            <p id="wt" class="wait-text">Aguardando dispositivos...</p>
+            <div class="spn" id="spn"></div>
+            <button class="start-btn" id="start-btn" onclick="APP.forceStart()" style="display:none">
+                ▶ Iniciar Jam
+            </button>
         </div>
-        <div id="gid">---</div>
-        <a id="lnk" href="#" target="_blank"></a>
-        <div class="pcards">
-            <div class="pc" id="c-stick1"><span class="dt"></span> 🥢 Baqueta Direita</div>
-            <div class="pc" id="c-stick2"><span class="dt"></span> 🥢 Baqueta Esquerda</div>
-            <div class="pc" id="c-pedal1"><span class="dt"></span> 🦶 Pedal Bumbo</div>
-            <div class="pc" id="c-pedal2"><span class="dt"></span> 🦶 Pedal Hi-Hat</div>
-        </div>
-        <p id="wt">Aguardando dispositivos...</p>
-        <div class="spn" id="spn"></div>
-        <button class="start-btn" id="start-btn" onclick="APP.forceStart()" style="display:none">
-            ▶ Iniciar com dispositivos conectados
-        </button>
     </div>
 
     <!-- BATERIA -->
     <div id="drum-ui" class="screen">
-        <div id="drum-header">
+        <div id="drum-top-bar">
             <div id="devices-bar"></div>
-            <div id="hihat-state">Hi-Hat: <span id="hh-label">Fechado 🔒</span></div>
+            <div id="hihat-badge"><span id="hh-icon">🔒</span> <span id="hh-label">Fechado</span></div>
         </div>
         <canvas id="dc"></canvas>
+        <div id="hit-flash-overlay"></div>
         <div id="hit-label"></div>
         <div id="combo-display"></div>
     </div>
 
     <!-- BAQUETA SETUP -->
     <div id="stick-setup" class="screen">
-        <button class="back-btn" onclick="APP.goMenu()">← Menu</button>
-        <h2 class="orange">🥢 Baqueta</h2>
-        <p class="hint">Digite o código do Visor:</p>
-        <input id="inp-stick" type="text" placeholder="DRUM-XXXXXX" maxlength="20" autocomplete="off">
-        <button class="connect-btn" onclick="APP.connectStick()">Conectar</button>
-        <p class="err" id="err-stick"></p>
+        <button class="back-btn" onclick="APP.goMenu()">‹ Voltar</button>
+        <div class="setup-card">
+            <h2>🥢 Baqueta</h2>
+            <p class="hint">Digite o código do Visor:</p>
+            <input id="inp-stick" type="text" placeholder="DRUM-XXXXXX" maxlength="20" autocomplete="off">
+            <button class="connect-btn" onclick="APP.connectStick()">Conectar</button>
+            <p class="err" id="err-stick"></p>
+        </div>
     </div>
 
     <!-- BAQUETA CONTROLE -->
     <div id="stick-ctrl" class="screen">
         <div id="sh">
-            <span id="slbl">Baqueta ?</span>
-            <span id="s-zone-name">Caixa</span>
+            <span id="slbl">Baqueta</span>
+            <span id="s-zone-name" class="zone-badge">🥁 Caixa</span>
             <span id="sst">🔗</span>
         </div>
-
         <div id="stick-view">
             <div id="big-stick">
                 <div class="stick-tip"></div>
-                <div class="stick-body"></div>
-                <div class="stick-grip"></div>
+                <div class="stick-shaft"></div>
+                <div class="stick-butt"></div>
             </div>
+            <div id="stick-ripple"></div>
         </div>
-
-        <div id="hit-indicator">💥</div>
-
+        <div id="hit-indicator"></div>
         <div id="zone-grid">
-            <button class="zb" data-zone="crash" onclick="APP.selectZone('crash')">
+            <button class="zb zb-cymbal" data-zone="crash" onclick="APP.selectZone('crash')">
                 <span class="zb-emoji">💛</span><span class="zb-name">Crash</span>
             </button>
-            <button class="zb" data-zone="ride" onclick="APP.selectZone('ride')">
-                <span class="zb-emoji">💿</span><span class="zb-name">Ride</span>
-            </button>
-            <button class="zb" data-zone="hihat" onclick="APP.selectZone('hihat')">
-                <span class="zb-emoji">🎩</span><span class="zb-name">Hi-Hat</span>
-            </button>
-            <button class="zb" data-zone="tom1" onclick="APP.selectZone('tom1')">
-                <span class="zb-emoji">🔴</span><span class="zb-name">Tom 1</span>
-            </button>
-            <button class="zb active" data-zone="snare" onclick="APP.selectZone('snare')">
-                <span class="zb-emoji">🥁</span><span class="zb-name">Caixa</span>
-            </button>
-            <button class="zb" data-zone="tom2" onclick="APP.selectZone('tom2')">
-                <span class="zb-emoji">🟠</span><span class="zb-name">Tom 2</span>
-            </button>
-            <button class="zb" data-zone="floor" onclick="APP.selectZone('floor')">
-                <span class="zb-emoji">🟤</span><span class="zb-name">Surdo</span>
-            </button>
-            <button class="zb" data-zone="china" onclick="APP.selectZone('china')">
-                <span class="zb-emoji">🔔</span><span class="zb-name">China</span>
-            </button>
-            <button class="zb" data-zone="splash" onclick="APP.selectZone('splash')">
+            <button class="zb zb-cymbal" data-zone="splash" onclick="APP.selectZone('splash')">
                 <span class="zb-emoji">💦</span><span class="zb-name">Splash</span>
             </button>
+            <button class="zb zb-cymbal" data-zone="ride" onclick="APP.selectZone('ride')">
+                <span class="zb-emoji">💿</span><span class="zb-name">Ride</span>
+            </button>
+            <button class="zb zb-cymbal" data-zone="hihat" onclick="APP.selectZone('hihat')">
+                <span class="zb-emoji">🎩</span><span class="zb-name">Hi-Hat</span>
+            </button>
+            <button class="zb zb-drum active" data-zone="snare" onclick="APP.selectZone('snare')">
+                <span class="zb-emoji">🥁</span><span class="zb-name">Caixa</span>
+            </button>
+            <button class="zb zb-cymbal" data-zone="china" onclick="APP.selectZone('china')">
+                <span class="zb-emoji">🔔</span><span class="zb-name">China</span>
+            </button>
+            <button class="zb zb-drum" data-zone="tom1" onclick="APP.selectZone('tom1')">
+                <span class="zb-emoji">🔴</span><span class="zb-name">Tom 1</span>
+            </button>
+            <button class="zb zb-drum" data-zone="tom2" onclick="APP.selectZone('tom2')">
+                <span class="zb-emoji">🟠</span><span class="zb-name">Tom 2</span>
+            </button>
+            <button class="zb zb-drum" data-zone="floor" onclick="APP.selectZone('floor')">
+                <span class="zb-emoji">🟤</span><span class="zb-name">Surdo</span>
+            </button>
         </div>
-
-        <div id="stick-sensitivity">
-            <label>Sensibilidade:</label>
+        <div id="stick-bottom">
+            <label class="sens-label">Sensibilidade</label>
             <input type="range" id="sens-slider" min="3" max="20" value="9" oninput="APP.setSens(this.value)">
         </div>
-
         <div id="stick-debug"></div>
     </div>
 
     <!-- PEDAL SETUP -->
     <div id="pedal-setup" class="screen">
-        <button class="back-btn" onclick="APP.goMenu()">← Menu</button>
-        <h2 class="blue">🦶 Pedal</h2>
-        <p class="hint">Escolha o tipo de pedal:</p>
-        <div class="pedal-type-btns">
-            <button class="pt-btn" id="pt-kick" onclick="APP.setPedalType('kick')">
-                <span class="ico">🥁</span>
-                <div><strong>Bumbo</strong><div class="desc">Pedal do bumbo</div></div>
-            </button>
-            <button class="pt-btn" id="pt-hihat" onclick="APP.setPedalType('hihat')">
-                <span class="ico">🎩</span>
-                <div><strong>Hi-Hat</strong><div class="desc">Abre e fecha o hi-hat</div></div>
-            </button>
-        </div>
-        <div id="pedal-connect-area" style="display:none">
-            <p class="hint">Digite o código do Visor:</p>
-            <input id="inp-pedal" type="text" placeholder="DRUM-XXXXXX" maxlength="20" autocomplete="off">
-            <button class="connect-btn" onclick="APP.connectPedal()">Conectar</button>
-            <p class="err" id="err-pedal"></p>
+        <button class="back-btn" onclick="APP.goMenu()">‹ Voltar</button>
+        <div class="setup-card">
+            <h2>🦶 Pedal</h2>
+            <p class="hint">Tipo de pedal:</p>
+            <div class="pedal-type-row">
+                <button class="pt-card" id="pt-kick" onclick="APP.setPedalType('kick')">
+                    <div class="pt-icon">🥁</div>
+                    <div class="pt-name">Bumbo</div>
+                </button>
+                <button class="pt-card" id="pt-hihat" onclick="APP.setPedalType('hihat')">
+                    <div class="pt-icon">🎩</div>
+                    <div class="pt-name">Hi-Hat</div>
+                </button>
+            </div>
+            <div id="pedal-connect-area" style="display:none">
+                <p class="hint">Código do Visor:</p>
+                <input id="inp-pedal" type="text" placeholder="DRUM-XXXXXX" maxlength="20" autocomplete="off">
+                <button class="connect-btn" onclick="APP.connectPedal()">Conectar</button>
+                <p class="err" id="err-pedal"></p>
+            </div>
         </div>
     </div>
 
     <!-- PEDAL CONTROLE -->
     <div id="pedal-ctrl" class="screen">
         <div id="ph">
-            <span id="plbl">Pedal ?</span>
+            <span id="plbl">Pedal</span>
             <span id="pst">🔗</span>
         </div>
         <div id="pedal-view">
             <div id="pedal-visual">
-                <div class="pedal-plate" id="pedal-plate">
-                    <div class="pedal-grip"></div>
-                    <div class="pedal-text" id="pedal-text">🥁 BUMBO</div>
+                <div class="pv-plate" id="pedal-plate">
+                    <div class="pv-grip"></div>
+                    <div class="pv-label" id="pedal-text">🥁 BUMBO</div>
                 </div>
-                <div class="pedal-base"></div>
-                <div class="pedal-hinge"></div>
+                <div class="pv-base"></div>
             </div>
             <div id="pedal-state-display"></div>
         </div>
         <div id="pedal-instructions">
-            <span id="pedal-inst-text">Toque e segure para pisar</span>
+            <span id="pedal-inst-text">Toque para pisar</span>
         </div>
     </div>
 
     <!-- OVERLAYS -->
     <div id="calib" class="overlay">
-        <div class="calib-icon">📱</div>
-        <h2>📐 Calibrar Baqueta</h2>
-        <p>Segure o celular como uma baqueta (na vertical) e toque Calibrar.</p>
-        <button onclick="APP.doCalib()">✓ Calibrar</button>
+        <div class="calib-phone">📱</div>
+        <h2>Calibrar Baqueta</h2>
+        <p>Segure o celular na vertical e toque calibrar</p>
+        <button class="calib-btn" onclick="APP.doCalib()">✓ Calibrar</button>
     </div>
 
     <div id="connecting-overlay" class="overlay">
+        <div class="spn big-spn"></div>
         <p>Conectando...</p>
-        <div class="spn"></div>
     </div>
 
     <script src="script.js"></script>

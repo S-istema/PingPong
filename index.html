@@ -4,111 +4,127 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>🏓 Tênis de Mesa</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="menu">
-    <h1>🏓 Tênis de Mesa</h1>
-    <p class="sub">Celular = Raquete Real!</p>
-    <button class="menu-btn" onclick="openVisor()">
-        <span class="ico">🖥️</span>
-        <div><strong>Visor (Mesa)</strong><div class="desc">Abre a mesa do jogo — use no PC/TV</div></div>
-    </button>
-    <button class="menu-btn" onclick="openRacket()">
-        <span class="ico">🏓</span>
-        <div><strong>Raquete</strong><div class="desc">Segure o celular como raquete</div></div>
-    </button>
-</div>
-
-<!-- VISOR SETUP -->
-<div id="visor-setup">
-    <button class="back-btn" onclick="goMenu()">← Menu</button>
-    <h2>🖥️ Mesa de Jogo</h2>
-    <p style="color:#888;margin-bottom:10px;font-size:.9em">Modo:</p>
-    <div class="mbtn-row">
-        <button class="mbtn" id="m1" onclick="pickMode(1)">👤 1 Jogador</button>
-        <button class="mbtn" id="m2" onclick="pickMode(2)">👥 2 Jogadores</button>
+    <!-- ========== MENU ========== -->
+    <div id="menu" class="screen active">
+        <h1>🏓 Tênis de Mesa</h1>
+        <p class="sub">Celular = Raquete Real!</p>
+        <button class="menu-btn" onclick="APP.openVisor()">
+            <span class="ico">🖥️</span>
+            <div>
+                <strong>Visor (Mesa)</strong>
+                <div class="desc">Abre a mesa — use no PC ou TV</div>
+            </div>
+        </button>
+        <button class="menu-btn" onclick="APP.openRacket()">
+            <span class="ico">🏓</span>
+            <div>
+                <strong>Raquete</strong>
+                <div class="desc">Segure o celular como raquete</div>
+            </div>
+        </button>
     </div>
-    <div id="cpanel">
-        <p style="color:#ccc;font-size:.85em">No celular escolha <b>Raquete</b> e digite o código:</p>
-        <div id="qrbox"><canvas id="qrc" width="160" height="160"></canvas></div>
-        <div id="gid">---</div>
-        <a id="lnk" href="#" target="_blank"></a>
-        <div class="pcards">
-            <div class="pc" id="c1"><span class="dt"></span> Jogador 1</div>
-            <div class="pc hidden" id="c2"><span class="dt"></span> Jogador 2</div>
+
+    <!-- ========== VISOR: SETUP ========== -->
+    <div id="visor-setup" class="screen">
+        <button class="back-btn" onclick="APP.goMenu()">← Menu</button>
+        <h2>🖥️ Mesa de Jogo</h2>
+        <p class="hint">Escolha o modo:</p>
+        <div class="mbtn-row">
+            <button class="mbtn" id="m1" onclick="APP.pickMode(1)">👤 1 Jogador</button>
+            <button class="mbtn" id="m2" onclick="APP.pickMode(2)">👥 2 Jogadores</button>
         </div>
-        <p id="wt" style="color:#888;font-size:.8em">Aguardando raquete(s)...</p>
-        <div class="spn" id="spn"></div>
-    </div>
-</div>
-
-<!-- JOGO -->
-<div id="game-ui">
-    <div id="sbar">
-        <div class="sb a"><div class="nm" id="n1">JOGADOR 1</div><div class="pt" id="sc1">0</div></div>
-        <span style="color:#444">×</span>
-        <div class="sb b"><div class="nm" id="n2">CPU</div><div class="pt" id="sc2">0</div></div>
-    </div>
-    <canvas id="gc"></canvas>
-    <div id="serve-info"></div>
-</div>
-<div id="msg"></div>
-
-<!-- RAQUETE SETUP -->
-<div id="racket-setup">
-    <button class="back-btn" onclick="goMenu()">← Menu</button>
-    <h2>🏓 Raquete</h2>
-    <p style="color:#aaa;font-size:.9em">Digite o código do Visor:</p>
-    <input id="inp" type="text" placeholder="PONG-XXXXXX" maxlength="20" autocomplete="off">
-    <button onclick="connectRacket()">Conectar</button>
-    <p class="err" id="err"></p>
-</div>
-
-<!-- RAQUETE CONTROLE -->
-<div id="racket-ctrl">
-    <div id="rh">
-        <span id="rlbl">Jogador ?</span>
-        <span id="rscr">0 × 0</span>
-        <span id="rst">🔗</span>
-    </div>
-    <div id="racket-view">
-        <div id="big-racket">
-            <div class="face red" id="rface">
-                <div class="rubber"></div>
-                <div class="logo">🏓</div>
+        <div id="cpanel">
+            <p class="hint">No celular escolha <b>Raquete</b> e digite o código:</p>
+            <div id="qrbox">
+                <canvas id="qrc" width="170" height="170"></canvas>
             </div>
-            <div class="handle-wrap">
-                <div class="handle"><div class="grip"></div></div>
+            <div id="gid">---</div>
+            <a id="lnk" href="#" target="_blank"></a>
+            <div class="pcards">
+                <div class="pc" id="c1"><span class="dt"></span> Jogador 1</div>
+                <div class="pc hidden" id="c2"><span class="dt"></span> Jogador 2</div>
             </div>
+            <p id="wt">Aguardando raquete(s)...</p>
+            <div class="spn" id="spn"></div>
         </div>
     </div>
-    <div id="swing-indicator">💥 REBATIDA!</div>
-    <div id="racket-debug"></div>
-</div>
 
-<!-- OVERLAYS -->
-<div id="calib">
-    <div class="calib-icon">📱</div>
-    <h2>📐 Calibrar Raquete</h2>
-    <p>Segure o celular como uma raquete de ping pong (na vertical, com a tela virada pra você) e toque em Calibrar.</p>
-    <button onclick="doCalib()">✓ Calibrar</button>
-</div>
+    <!-- ========== VISOR: JOGO ========== -->
+    <div id="game-ui" class="screen">
+        <div id="sbar">
+            <div class="sb blue-side">
+                <div class="nm" id="n1">JOGADOR 1</div>
+                <div class="pt" id="sc1">0</div>
+            </div>
+            <span class="vs">×</span>
+            <div class="sb red-side">
+                <div class="nm" id="n2">CPU</div>
+                <div class="pt" id="sc2">0</div>
+            </div>
+        </div>
+        <canvas id="gc"></canvas>
+        <div id="serve-info"></div>
+    </div>
+    <div id="msg"></div>
 
-<div id="gov">
-    <div class="r" id="gotxt"></div>
-    <div class="s" id="goscr"></div>
-</div>
+    <!-- ========== RAQUETE: SETUP ========== -->
+    <div id="racket-setup" class="screen">
+        <button class="back-btn" onclick="APP.goMenu()">← Menu</button>
+        <h2 class="orange">🏓 Raquete</h2>
+        <p class="hint">Digite o código exibido no Visor:</p>
+        <input id="inp" type="text" placeholder="PONG-XXXXXX" maxlength="20" autocomplete="off">
+        <button class="connect-btn" onclick="APP.connectRacket()">Conectar</button>
+        <p class="err" id="err"></p>
+    </div>
 
-<div id="connecting-overlay">
-    <p>Conectando ao jogo...</p>
-    <div class="spn"></div>
-</div>
+    <!-- ========== RAQUETE: CONTROLE ========== -->
+    <div id="racket-ctrl" class="screen">
+        <div id="rh">
+            <span id="rlbl">Jogador ?</span>
+            <span id="rscr">0 × 0</span>
+            <span id="rst">🔗</span>
+        </div>
+        <div id="racket-view">
+            <div id="big-racket">
+                <div class="face red" id="rface">
+                    <div class="rubber"></div>
+                    <div class="logo">🏓</div>
+                </div>
+                <div class="handle-wrap">
+                    <div class="handle">
+                        <div class="grip"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="swing-indicator">💥 REBATIDA!</div>
+        <div id="racket-debug"></div>
+    </div>
 
-<script src="script.js">
-</script>
+    <!-- ========== OVERLAYS ========== -->
+    <div id="calib" class="overlay">
+        <div class="calib-icon">📱</div>
+        <h2>📐 Calibrar Raquete</h2>
+        <p>Segure o celular na vertical, como uma raquete de verdade, e toque Calibrar.</p>
+        <button onclick="APP.doCalib()">✓ Calibrar</button>
+    </div>
+
+    <div id="gov" class="overlay">
+        <div class="r" id="gotxt"></div>
+        <div class="s" id="goscr"></div>
+    </div>
+
+    <div id="connecting-overlay" class="overlay">
+        <p>Conectando...</p>
+        <div class="spn"></div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>

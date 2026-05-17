@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>🏓 Tênis de Mesa</title>
+    <title>🥁 Bateria Virtual</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
@@ -12,112 +12,103 @@
 
     <!-- ========== MENU ========== -->
     <div id="menu" class="screen active">
-        <h1>🏓 Tênis de Mesa</h1>
-        <p class="sub">Celular = Raquete Real!</p>
-        <button class="menu-btn" onclick="APP.openVisor()">
+        <h1>🥁 Bateria Virtual</h1>
+        <p class="sub">Celular = Baqueta Real!</p>
+        <button class="menu-btn" onclick="APP.openKit()">
             <span class="ico">🖥️</span>
             <div>
-                <strong>Visor (Mesa)</strong>
-                <div class="desc">Abre a mesa — use no PC ou TV</div>
+                <strong>Bateria (Visor)</strong>
+                <div class="desc">Mostra a bateria — use no PC ou TV</div>
             </div>
         </button>
-        <button class="menu-btn" onclick="APP.openRacket()">
-            <span class="ico">🏓</span>
+        <button class="menu-btn" onclick="APP.openStick()">
+            <span class="ico">🥢</span>
             <div>
-                <strong>Raquete</strong>
-                <div class="desc">Segure o celular como raquete</div>
+                <strong>Baqueta</strong>
+                <div class="desc">Segure o celular e toque no ar!</div>
             </div>
         </button>
     </div>
 
     <!-- ========== VISOR: SETUP ========== -->
-    <div id="visor-setup" class="screen">
+    <div id="kit-setup" class="screen">
         <button class="back-btn" onclick="APP.goMenu()">← Menu</button>
-        <h2>🖥️ Mesa de Jogo</h2>
-        <p class="hint">Escolha o modo:</p>
-        <div class="mbtn-row">
-            <button class="mbtn" id="m1" onclick="APP.pickMode(1)">👤 1 Jogador</button>
-            <button class="mbtn" id="m2" onclick="APP.pickMode(2)">👥 2 Jogadores</button>
+        <h2>🥁 Kit de Bateria</h2>
+        <p class="hint">No celular escolha <b>Baqueta</b> e digite o código:</p>
+        <div id="qrbox">
+            <canvas id="qrc" width="170" height="170"></canvas>
         </div>
-        <div id="cpanel">
-            <p class="hint">No celular escolha <b>Raquete</b> e digite o código:</p>
-            <div id="qrbox">
-                <canvas id="qrc" width="170" height="170"></canvas>
-            </div>
-            <div id="gid">---</div>
-            <a id="lnk" href="#" target="_blank"></a>
-            <div class="pcards">
-                <div class="pc" id="c1"><span class="dt"></span> Jogador 1</div>
-                <div class="pc hidden" id="c2"><span class="dt"></span> Jogador 2</div>
-            </div>
-            <p id="wt">Aguardando raquete(s)...</p>
-            <div class="spn" id="spn"></div>
+        <div id="gid">---</div>
+        <a id="lnk" href="#" target="_blank"></a>
+        <div class="pcards">
+            <div class="pc" id="c1"><span class="dt"></span> Baqueta 1 (Direita)</div>
+            <div class="pc" id="c2"><span class="dt"></span> Baqueta 2 (Esquerda)</div>
         </div>
+        <p id="wt">Aguardando baqueta(s)...</p>
+        <div class="spn" id="spn"></div>
+        <p class="hint" style="margin-top:15px">Conecte 1 ou 2 celulares como baquetas</p>
     </div>
 
-    <!-- ========== VISOR: JOGO ========== -->
-    <div id="game-ui" class="screen">
-        <div id="sbar">
-            <div class="sb blue-side">
-                <div class="nm" id="n1">JOGADOR 1</div>
-                <div class="pt" id="sc1">0</div>
-            </div>
-            <span class="vs">×</span>
-            <div class="sb red-side">
-                <div class="nm" id="n2">CPU</div>
-                <div class="pt" id="sc2">0</div>
-            </div>
-        </div>
-        <canvas id="gc"></canvas>
-        <div id="serve-info"></div>
+    <!-- ========== VISOR: BATERIA ========== -->
+    <div id="drum-ui" class="screen">
+        <canvas id="dc"></canvas>
+        <div id="hit-label"></div>
+        <div id="combo-display"></div>
     </div>
-    <div id="msg"></div>
 
-    <!-- ========== RAQUETE: SETUP ========== -->
-    <div id="racket-setup" class="screen">
+    <!-- ========== BAQUETA: SETUP ========== -->
+    <div id="stick-setup" class="screen">
         <button class="back-btn" onclick="APP.goMenu()">← Menu</button>
-        <h2 class="orange">🏓 Raquete</h2>
+        <h2 class="orange">🥢 Baqueta</h2>
         <p class="hint">Digite o código exibido no Visor:</p>
-        <input id="inp" type="text" placeholder="PONG-XXXXXX" maxlength="20" autocomplete="off">
-        <button class="connect-btn" onclick="APP.connectRacket()">Conectar</button>
+        <input id="inp" type="text" placeholder="DRUM-XXXXXX" maxlength="20" autocomplete="off">
+        <button class="connect-btn" onclick="APP.connectStick()">Conectar</button>
         <p class="err" id="err"></p>
     </div>
 
-    <!-- ========== RAQUETE: CONTROLE ========== -->
-    <div id="racket-ctrl" class="screen">
-        <div id="rh">
-            <span id="rlbl">Jogador ?</span>
-            <span id="rscr">0 × 0</span>
-            <span id="rst">🔗</span>
+    <!-- ========== BAQUETA: CONTROLE ========== -->
+    <div id="stick-ctrl" class="screen">
+        <div id="sh">
+            <span id="slbl">Baqueta ?</span>
+            <span id="szone">---</span>
+            <span id="sst">🔗</span>
         </div>
-        <div id="racket-view">
-            <div id="big-racket">
-                <div class="face red" id="rface">
-                    <div class="rubber"></div>
-                    <div class="logo">🏓</div>
-                </div>
-                <div class="handle-wrap">
-                    <div class="handle">
-                        <div class="grip"></div>
-                    </div>
-                </div>
+        <div id="stick-view">
+            <div id="big-stick">
+                <div class="stick-tip"></div>
+                <div class="stick-body"></div>
+                <div class="stick-grip"></div>
             </div>
         </div>
-        <div id="swing-indicator">💥 REBATIDA!</div>
-        <div id="racket-debug"></div>
+        <div id="hit-indicator">💥 HIT!</div>
+        <div id="zone-selector">
+            <p class="zone-title">Zona alvo (incline para mudar):</p>
+            <div class="zones">
+                <div class="zone-item" id="z-hihat">🎩 Hi-Hat</div>
+                <div class="zone-item" id="z-snare">🥁 Caixa</div>
+                <div class="zone-item active" id="z-tom1">🔴 Tom 1</div>
+                <div class="zone-item" id="z-tom2">🟠 Tom 2</div>
+                <div class="zone-item" id="z-floor">🟤 Surdo</div>
+                <div class="zone-item" id="z-crash">💛 Crash</div>
+                <div class="zone-item" id="z-ride">💿 Ride</div>
+            </div>
+        </div>
+        <div id="stick-debug"></div>
+    </div>
+
+    <!-- ========== BAQUETA: PEDAL ========== -->
+    <div id="pedal-bar">
+        <button id="pedal-btn" ontouchstart="APP.pedalDown()" ontouchend="APP.pedalUp()">
+            🦶 PEDAL (Bumbo)
+        </button>
     </div>
 
     <!-- ========== OVERLAYS ========== -->
     <div id="calib" class="overlay">
         <div class="calib-icon">📱</div>
-        <h2>📐 Calibrar Raquete</h2>
-        <p>Segure o celular na vertical, como uma raquete de verdade, e toque Calibrar.</p>
+        <h2>📐 Calibrar Baqueta</h2>
+        <p>Segure o celular na vertical como uma baqueta, com a tela virada pra você, e toque Calibrar.</p>
         <button onclick="APP.doCalib()">✓ Calibrar</button>
-    </div>
-
-    <div id="gov" class="overlay">
-        <div class="r" id="gotxt"></div>
-        <div class="s" id="goscr"></div>
     </div>
 
     <div id="connecting-overlay" class="overlay">
